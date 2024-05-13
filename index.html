@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Query Interface</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Log Query Interface</h1>
+    <form id="queryForm">
+        <label for="level">Level:</label>
+        <input type="text" id="level" name="level"><br><br>
+        <label for="logString">Log String:</label>
+        <input type="text" id="logString" name="logString"><br><br>
+        <label for="timestampStart">Timestamp Start:</label>
+        <input type="datetime-local" id="timestampStart" name="timestamp_start"><br><br>
+        <label for="timestampEnd">Timestamp End:</label>
+        <input type="datetime-local" id="timestampEnd" name="timestamp_end"><br><br>
+        <label for="source">Source:</label>
+        <input type="text" id="source" name="source"><br><br>
+        <button type="submit">Search</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById("queryForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const searchParams = new URLSearchParams(formData).toString();
+            fetch('/search?' + searchParams)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("result").innerHTML = JSON.stringify(data);
+                });
+        });
+    </script>
+</body>
+</html>

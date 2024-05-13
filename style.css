@@ -1,0 +1,49 @@
+/* Styles for the body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Styles for the h1 heading */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Styles for the form */
+form {
+    width: 50%;
+    margin: 0 auto;
+}
+
+/* Styles for form labels */
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Styles for form inputs */
+input[type="text"], input[type="datetime-local"], input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Styles for the submit button */
+input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+/* Styles for the result container */
+#result {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
