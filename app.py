@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-import logging
 import json
 from datetime import datetime
 
@@ -15,38 +14,47 @@ def log_to_file(level, log_string, source):
             "source": source
         }
     }
-    logging.basicConfig(filename=source, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    logging.info(json.dumps(log_data))
+    try:
+        with open(source, 'a') as file:
+            file.write(json.dumps(log_data) + '\n')
+    except Exception as e:
+        return jsonify({'error': f'Failed to log data: {str(e)}'}), 500
 
 @app.route('/log', methods=['POST'])
 def log():
-    data = request.get_json()
-    level = data['level']
-    log_string = data['log_string']
-    source = data['source']
-    log_to_file(level, log_string, source)
-    return jsonify({'message': 'Log created successfully'}), 201
+    try:
+        data = request.get_json()
+        level = data['level']
+        log_string = data['log_string']
+        source = data['source']
+        log_to_file(level, log_string, source)
+        return jsonify({'message': 'Log created successfully'}), 201
+    except Exception as e:
+        return jsonify({'error': f'Failed to create log: {str(e)}'}), 400
 
 @app.route('/search', methods=['GET'])
 def search_logs():
-    level = request.args.get('level')
-    log_string = request.args.get('log_string')
-    start_timestamp = request.args.get('start_timestamp')
-    end_timestamp = request.args.get('end_timestamp')
-    source = request.args.get('source')
+    try:
+        level = request.args.get('level')
+        log_string = request.args.get('logString')
+        start_timestamp = request.args.get('startTimestamp')
+        end_timestamp = request.args.get('endTimestamp')
+        source = request.args.get('source')
 
-    result = []
-    for log_file in LOG_FILES:
-        with open(log_file, 'r') as file:
-            for line in file:
-                log_data = json.loads(line)
-                if (level is None or log_data['level'] == level) and \
-                   (log_string is None or log_data['log_string'] == log_string) and \
-                   (start_timestamp is None or log_data['timestamp'] >= start_timestamp) and \
-                   (end_timestamp is None or log_data['timestamp'] <= end_timestamp) and \
-                   (source is None or log_data['metadata']['source'] == source):
-                    result.append(log_data)
-    return jsonify(result)
+        result = []
+        for log_file in LOG_FILES:
+            with open(log_file, 'r') as file:
+                for line in file:
+                    log_data = json.loads(line)
+                    if (level is None or log_data['level'] == level) and \
+                       (log_string is None or log_data['log_string'] == log_string) and \
+                       (start_timestamp is None or log_data['timestamp'] >= start_timestamp) and \
+                       (end_timestamp is None or log_data['timestamp'] <= end_timestamp) and \
+                       (source is None or log_data['metadata']['source'] == source):
+                        result.append(log_data)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': f'Failed to search logs: {str(e)}'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

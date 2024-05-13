@@ -28,8 +28,13 @@
             event.preventDefault();
             const formData = new FormData(this);
             const searchParams = new URLSearchParams(formData).toString();
-            fetch('/search?' + searchParams)
-                .then(response => response.json())
+            fetch('http://localhost:5000/search?' + searchParams)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch search results');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     const resultDiv = document.getElementById("result");
                     resultDiv.innerHTML = ""; // Clear previous results
