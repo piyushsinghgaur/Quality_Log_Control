@@ -13,8 +13,7 @@ The Log Query Interface is a web application designed to ingest and query logs s
 ### Steps
 1. **Clone the Repository:**
    ```
-   git clone https://github.com/your-username/log-query-interface.git
-   cd log-query-interface
+   git clone https://github.com/piyushsinghgaur/Quality_Log_Control
    ```
 
 2. **Run the Backend:**
