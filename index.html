@@ -13,10 +13,10 @@
         <input type="text" id="level" name="level"><br><br>
         <label for="logString">Log String:</label>
         <input type="text" id="logString" name="logString"><br><br>
-        <label for="timestampStart">Timestamp Start:</label>
-        <input type="datetime-local" id="timestampStart" name="timestamp_start"><br><br>
-        <label for="timestampEnd">Timestamp End:</label>
-        <input type="datetime-local" id="timestampEnd" name="timestamp_end"><br><br>
+        <label for="startTimestamp">Start Timestamp:</label>
+        <input type="datetime-local" id="startTimestamp" name="startTimestamp"><br><br>
+        <label for="endTimestamp">End Timestamp:</label>
+        <input type="datetime-local" id="endTimestamp" name="endTimestamp"><br><br>
         <label for="source">Source:</label>
         <input type="text" id="source" name="source"><br><br>
         <button type="submit">Search</button>
@@ -31,7 +31,21 @@
             fetch('/search?' + searchParams)
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById("result").innerHTML = JSON.stringify(data);
+                    const resultDiv = document.getElementById("result");
+                    resultDiv.innerHTML = ""; // Clear previous results
+                    if (data.length === 0) {
+                        resultDiv.innerText = "No logs found.";
+                    } else {
+                        data.forEach(log => {
+                            const logElement = document.createElement("div");
+                            logElement.innerText = JSON.stringify(log);
+                            resultDiv.appendChild(logElement);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching search results:', error);
+                    document.getElementById("result").innerText = "An error occurred. Please try again later.";
                 });
         });
     </script>
